@@ -1,0 +1,30 @@
+{
+  "name": "gongzhonghao-agent",
+  "version": "0.1.0",
+  "description": "自动化运营公众号的 AI Agent：抓取 AI/科技趋势资讯，使用大模型生成图文内容，并自动发布到微信公众号草稿箱",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js run",
+    "dev": "tsx src/index.ts run",
+    "schedule": "tsx src/index.ts schedule",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "node-cron": "^3.0.3",
+    "openai": "^4.77.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
