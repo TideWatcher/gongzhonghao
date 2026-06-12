@@ -82,6 +82,34 @@ npm run schedule
 | `CRON_SCHEDULE` | 定时任务 cron 表达式，默认每天上午 10:30 |
 | `DRY_RUN` | `true` 时跳过微信发布，仅本地生成内容用于调试 |
 
+## 部署到 GitHub Actions（推荐：无需常驻服务器）
+
+仓库内置了 `.github/workflows/daily-publish.yml`，可以让 GitHub 每天定时帮你跑一次流水线，
+完全不需要本地电脑或云服务器保持开机。
+
+### 配置步骤
+
+1. **配置 Secrets**（仓库 Settings → Secrets and variables → Actions → Secrets）：
+   - `LLM_API_KEY`：大模型 API Key（必填）
+   - `LLM_BASE_URL`：大模型 API 地址，如 Anthropic 填 `https://api.anthropic.com/v1`（必填）
+   - `LLM_MODEL`：模型名，如 `claude-sonnet-4-6`（必填）
+   - `WECHAT_APP_ID` / `WECHAT_APP_SECRET` / `WECHAT_DEFAULT_COVER`：仅当公众号已认证、需要自动
+     创建草稿时才配置；个人未认证订阅号留空即可，流水线会自动跳过该步骤。
+
+2. **（可选）配置 Variables**（同一页面的 Variables 标签）：
+   - `SOURCES`、`SOURCE_FETCH_LIMIT`、`ARTICLE_ITEM_COUNT`：覆盖 `.env.example` 中的默认值。
+
+3. **启用 Workflow 权限**：仓库 Settings → Actions → General → Workflow permissions，
+   选择「Read and write permissions」，以便 Action 能把生成的文章提交回仓库。
+
+### 运行效果
+
+- 每天北京时间 **10:30**（cron `30 2 * * *`，UTC）自动运行一次。
+- 生成的文章 HTML 会提交到 `data/articles/`，去重记录提交到 `data/history.json`。
+- 同时会自动创建一个带 `daily-digest` 标签的 **Issue**，包含标题、摘要、资讯来源列表，
+  方便你（订阅了仓库通知后）第一时间收到提醒，打开对应 HTML 文件复制到公众号编辑器发布。
+- 也可以在 Actions 页面手动触发（`workflow_dispatch`），无需等到第二天。
+
 ## 扩展方向
 
 - 新增数据源：实现 `TrendSource` 接口并在 `src/sources/index.ts` 的 `REGISTRY` 中注册。

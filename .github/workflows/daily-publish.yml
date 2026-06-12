@@ -1,0 +1,92 @@
+name: 公众号自动化运营 - 每日生成
+
+on:
+  schedule:
+    # UTC 02:30 = 北京时间 10:30
+    - cron: "30 2 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: daily-publish
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run publish pipeline
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          WECHAT_APP_ID: ${{ secrets.WECHAT_APP_ID }}
+          WECHAT_APP_SECRET: ${{ secrets.WECHAT_APP_SECRET }}
+          WECHAT_DEFAULT_COVER: ${{ secrets.WECHAT_DEFAULT_COVER }}
+          SOURCES: ${{ vars.SOURCES }}
+          SOURCE_FETCH_LIMIT: ${{ vars.SOURCE_FETCH_LIMIT }}
+          ARTICLE_ITEM_COUNT: ${{ vars.ARTICLE_ITEM_COUNT }}
+          DRY_RUN: "false"
+        run: npm run dev
+
+      - name: Commit generated article and history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "没有新增内容，跳过提交"
+          else
+            git commit -m "chore: 自动生成每日公众号文章 [skip ci]"
+            git push
+          fi
+
+      - name: 创建提醒 Issue
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'data/last-run.json';
+            if (!fs.existsSync(path)) {
+              console.log('未找到 last-run.json，跳过创建 Issue');
+              return;
+            }
+            const result = JSON.parse(fs.readFileSync(path, 'utf-8'));
+            const sourcesList = (result.sources || [])
+              .map((s) => `- [${s.title}](${s.url}) (${s.source})`)
+              .join('\n');
+            const body = [
+              `**标题**: ${result.title}`,
+              `**摘要**: ${result.digest}`,
+              '',
+              `生成的文章文件: \`${result.exportedFilePath}\``,
+              '',
+              '**本期资讯来源**:',
+              sourcesList,
+              '',
+              `生成时间: ${result.generatedAt}`,
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📰 每日公众号文章已生成: ${result.title}`,
+              body,
+              labels: ['daily-digest'],
+            });
