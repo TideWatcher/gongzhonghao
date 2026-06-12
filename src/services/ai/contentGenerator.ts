@@ -89,11 +89,17 @@ export class ContentGenerator {
         { role: "user", content: buildUserPrompt(items) },
       ],
       temperature: 0.7,
+      max_tokens: 4096,
     });
 
     const raw = completion.choices[0]?.message?.content;
     if (!raw) {
       throw new Error("大模型未返回任何内容");
+    }
+
+    const finishReason = completion.choices[0]?.finish_reason;
+    if (finishReason === "length") {
+      logger.warn("大模型输出因达到 max_tokens 上限被截断，可能导致 JSON 不完整", { finishReason });
     }
 
     let parsed: GeneratedArticle;

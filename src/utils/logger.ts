@@ -4,6 +4,9 @@ function format(level: LogLevel, message: string, meta?: unknown): string {
   const timestamp = new Date().toISOString();
   const base = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
   if (meta === undefined) return base;
+  if (meta instanceof Error) {
+    return `${base} ${meta.name}: ${meta.message}\n${meta.stack ?? ""}`;
+  }
   try {
     return `${base} ${JSON.stringify(meta)}`;
   } catch {
