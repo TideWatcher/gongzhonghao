@@ -27,15 +27,15 @@ export const config = {
     defaultCover: process.env.WECHAT_DEFAULT_COVER ?? "",
   },
   sources: {
-    enabled: (process.env.SOURCES ?? "github_trending,hacker_news")
+    enabled: (process.env.SOURCES ?? "github_trending,hacker_news,crypto_news")
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean),
     fetchLimit: Number(process.env.SOURCE_FETCH_LIMIT ?? 5),
-    articleItemCount: Number(process.env.ARTICLE_ITEM_COUNT ?? 5),
+    articleItemCount: Number(process.env.ARTICLE_ITEM_COUNT ?? 6),
   },
   schedule: {
-    cron: process.env.CRON_SCHEDULE ?? "0 8 * * *",
+    cron: process.env.CRON_SCHEDULE ?? "30 10 * * *",
     timezone: process.env.TZ ?? "Asia/Shanghai",
   },
   dryRun: bool("DRY_RUN", false),

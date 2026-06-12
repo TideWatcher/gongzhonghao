@@ -22,8 +22,13 @@
 ### 模块说明
 
 - `src/sources/`：数据源抓取层，每个数据源实现统一的 `TrendSource` 接口（`fetch(limit)`），
-  当前内置 `github_trending`（GitHub 每日趋势仓库）与 `hacker_news`（HackerNews 热门话题），
-  可按需扩展新增数据源（如微博热搜、AI 资讯站点、RSS 等）。
+  当前内置：
+  - `github_trending`：GitHub 每日趋势仓库，偏 AI 应用/开发工具
+  - `hacker_news`：Hacker News 热门话题，偏科技/AI 综合资讯
+  - `crypto_news`：CryptoCompare 快讯（免 API Key），偏 Crypto/Web3 应用资讯
+
+  多个数据源会按 round-robin 交叉合并，保证最终文章的来源多样性，
+  可按需扩展新增数据源（如微博热搜、特定 RSS 等）。
 - `src/services/store/historyStore.ts`：基于本地 JSON 文件的去重记录，避免同一条资讯被重复整理发布。
 - `src/services/ai/contentGenerator.ts`：调用大模型（兼容 OpenAI API 的服务，如 OpenAI / DeepSeek /
   通义千问 / Moonshot 等），将多条资讯改写整理为一篇结构化的公众号图文文章（标题 + 摘要 + 正文 HTML）。
@@ -71,10 +76,10 @@ npm run schedule
 | `LLM_API_KEY` / `LLM_BASE_URL` / `LLM_MODEL` | 大模型服务配置，兼容 OpenAI SDK 的服务均可 |
 | `WECHAT_APP_ID` / `WECHAT_APP_SECRET` | 微信公众号开发者凭证（需在公众号后台「开发-基本配置」中获取，并将服务器 IP 加入白名单） |
 | `WECHAT_DEFAULT_COVER` | 草稿封面图片（本地路径或可下载 URL） |
-| `SOURCES` | 启用的数据源，逗号分隔 |
+| `SOURCES` | 启用的数据源，逗号分隔，可选 `github_trending` / `hacker_news` / `crypto_news` |
 | `SOURCE_FETCH_LIMIT` | 每个数据源抓取条数 |
 | `ARTICLE_ITEM_COUNT` | 每篇文章合并的资讯条数 |
-| `CRON_SCHEDULE` | 定时任务 cron 表达式 |
+| `CRON_SCHEDULE` | 定时任务 cron 表达式，默认每天上午 10:30 |
 | `DRY_RUN` | `true` 时跳过微信发布，仅本地生成内容用于调试 |
 
 ## 扩展方向
