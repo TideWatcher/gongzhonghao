@@ -1,0 +1,40 @@
+{
+  "title": "苹果开源容器工具、AI智能体「破产」运营者，今日科技热点速览",
+  "digest": "苹果推出Mac容器工具，AI智能体失控狂烧钱，六条热点一网打尽",
+  "itemCount": 6,
+  "sources": [
+    {
+      "title": "apple/container",
+      "url": "https://github.com/apple/container",
+      "source": "github_trending"
+    },
+    {
+      "title": "AI agent bankrupted their operator while trying to scan DN42",
+      "url": "https://lantian.pub/en/article/fun/ai-agent-bankrupted-their-operator-scan-dn42lantian.lantian/",
+      "source": "hacker_news"
+    },
+    {
+      "title": "addyosmani/agent-skills",
+      "url": "https://github.com/addyosmani/agent-skills",
+      "source": "github_trending"
+    },
+    {
+      "title": "If you are asking for human attention, demonstrate human effort",
+      "url": "https://tombedor.dev/human-attention-and-human-effort/",
+      "source": "hacker_news"
+    },
+    {
+      "title": "maziyarpanahi/openmed",
+      "url": "https://github.com/maziyarpanahi/openmed",
+      "source": "github_trending"
+    },
+    {
+      "title": "Nobody ever gets credit for fixing problems that never happened (2001) [pdf]",
+      "url": "https://web.mit.edu/nelsonr/www/Repenning=Sterman_CMR_su01_.pdf",
+      "source": "hacker_news"
+    }
+  ],
+  "exportedFilePath": "data/articles/2026-06-12T09-23-05-824Z.html",
+  "dryRun": false,
+  "generatedAt": "2026-06-12T09:23:05.825Z"
+}
