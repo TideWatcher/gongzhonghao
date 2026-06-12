@@ -13,6 +13,7 @@ async function main(): Promise<void> {
         digest: result.digest,
         itemCount: result.items.length,
         draftMediaId: result.draftMediaId,
+        exportedFilePath: result.exportedFilePath,
         dryRun: result.dryRun,
       });
       break;

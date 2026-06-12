@@ -5,6 +5,7 @@ import { ContentGenerator } from "../services/ai/contentGenerator.js";
 import { WechatClient } from "../services/wechat/wechatClient.js";
 import { historyStore } from "../services/store/historyStore.js";
 import { renderArticleHtml } from "../templates/article.js";
+import { exportArticleToFile } from "../services/output/articleExporter.js";
 import { logger } from "../utils/logger.js";
 
 export interface PipelineResult {
@@ -12,6 +13,7 @@ export interface PipelineResult {
   title: string;
   digest: string;
   draftMediaId?: string;
+  exportedFilePath?: string;
   dryRun: boolean;
 }
 
@@ -20,8 +22,9 @@ export interface PipelineResult {
  * 1. 抓取多数据源的热点资讯
  * 2. 过滤掉已经发布过的内容
  * 3. 调用大模型生成图文文章
- * 4. （非 dry-run）上传封面 + 创建公众号草稿
- * 5. 记录已处理的资讯，避免重复
+ * 4. 导出文章到本地 HTML 文件（供手动发布）
+ * 5. 若已配置微信公众号凭证且非 dry-run，上传封面 + 创建公众号草稿
+ * 6. 记录已处理的资讯，避免重复
  */
 export async function runPublishPipeline(): Promise<PipelineResult> {
   logger.info("开始抓取热点资讯...");
@@ -48,8 +51,19 @@ export async function runPublishPipeline(): Promise<PipelineResult> {
     dryRun: config.dryRun,
   };
 
+  result.exportedFilePath = await exportArticleToFile(
+    { title: article.title, digest: article.digest, contentHtml: article.contentHtml },
+    selected,
+  );
+
   if (config.dryRun) {
     logger.info("DRY_RUN=true，跳过微信发布步骤", { title: article.title, digest: article.digest });
+    return result;
+  }
+
+  if (!config.wechat.appId || !config.wechat.appSecret) {
+    logger.info("未配置微信公众号凭证，跳过自动创建草稿，请使用导出的 HTML 文件手动发布");
+    await historyStore.markAsPublished(selected.map((item) => item.id));
     return result;
   }
 

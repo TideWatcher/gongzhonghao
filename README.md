@@ -28,13 +28,19 @@
 - `src/services/ai/contentGenerator.ts`：调用大模型（兼容 OpenAI API 的服务，如 OpenAI / DeepSeek /
   通义千问 / Moonshot 等），将多条资讯改写整理为一篇结构化的公众号图文文章（标题 + 摘要 + 正文 HTML）。
 - `src/templates/article.ts`：在 AI 生成正文的基础上拼接「资料来源」页脚，提升内容可追溯性。
+- `src/services/output/articleExporter.ts`：将生成的文章导出为本地 HTML 文件（`data/articles/`），
+  适用于**个人未认证订阅号**等无法调用草稿箱 API 的场景——打开文件，将内容复制到公众号网页版图文
+  编辑器即可手动发布。
 - `src/services/wechat/wechatClient.ts`：微信公众号「草稿箱」API 封装，包含
   - `access_token` 获取与缓存
   - 封面图片上传为永久素材
   - 创建图文草稿（`draft/add`）
 
-  **注意**：出于安全考虑，Agent 默认仅创建草稿，不会自动群发，最终发布需运营人员在公众号后台
-  「草稿箱」中预览确认后手动发布。
+  **注意**：
+  - 出于安全考虑，Agent 默认仅创建草稿，不会自动群发，最终发布需运营人员在公众号后台
+    「草稿箱」中预览确认后手动发布。
+  - `draft/add` 接口仅对**已认证的公众号**开放。若未配置 `WECHAT_APP_ID` / `WECHAT_APP_SECRET`，
+    流水线会自动跳过该步骤，仅生成本地 HTML 文件。
 - `src/pipeline/publishPipeline.ts`：编排以上各步骤的完整流水线。
 - `src/scheduler/cron.ts`：基于 `node-cron` 的定时任务，按 `CRON_SCHEDULE` 周期自动运行流水线。
 - `src/index.ts`：CLI 入口，支持 `run`（执行一次）与 `schedule`（启动常驻定时任务）。
