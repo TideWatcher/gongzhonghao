@@ -1,40 +1,40 @@
 {
-  "title": "苹果开源容器工具、AI智能体「破产」运营者，今日科技热点速览",
-  "digest": "苹果推出Mac容器工具，AI智能体失控狂烧钱，六条热点一网打尽",
+  "title": "Anthropic被美政府叫停模型访问，开源音乐管家火了",
+  "digest": "AI监管风波、无稀土电机突破、开源协作工具，今日科技圈大事一览",
   "itemCount": 6,
   "sources": [
     {
-      "title": "apple/container",
-      "url": "https://github.com/apple/container",
-      "source": "github_trending"
-    },
-    {
-      "title": "AI agent bankrupted their operator while trying to scan DN42",
-      "url": "https://lantian.pub/en/article/fun/ai-agent-bankrupted-their-operator-scan-dn42lantian.lantian/",
+      "title": "There is a shadow hanging over this Fable thing",
+      "url": "https://12gramsofcarbon.com/p/tech-things-there-is-a-massive-shadow",
       "source": "hacker_news"
     },
     {
-      "title": "addyosmani/agent-skills",
-      "url": "https://github.com/addyosmani/agent-skills",
+      "title": "music-assistant/server",
+      "url": "https://github.com/music-assistant/server",
       "source": "github_trending"
     },
     {
-      "title": "If you are asking for human attention, demonstrate human effort",
-      "url": "https://tombedor.dev/human-attention-and-human-effort/",
+      "title": "Statement on US government directive to suspend access to Fable 5 and Mythos 5",
+      "url": "https://www.anthropic.com/news/fable-mythos-access",
       "source": "hacker_news"
     },
     {
-      "title": "maziyarpanahi/openmed",
-      "url": "https://github.com/maziyarpanahi/openmed",
+      "title": "mattermost/mattermost",
+      "url": "https://github.com/mattermost/mattermost",
       "source": "github_trending"
     },
     {
-      "title": "Nobody ever gets credit for fixing problems that never happened (2001) [pdf]",
-      "url": "https://web.mit.edu/nelsonr/www/Repenning=Sterman_CMR_su01_.pdf",
+      "title": "Electric motors with no rare earths",
+      "url": "https://www.renaultgroup.com/en/magazine/energy-and-powertrains/all-about-electric-motors-with-no-rare-earths/",
+      "source": "hacker_news"
+    },
+    {
+      "title": "Shepherd's Dog: A Game by the Most Dangerous AI Model",
+      "url": "https://koenvangilst.nl/lab/claude-fable-shepherds-dog",
       "source": "hacker_news"
     }
   ],
-  "exportedFilePath": "data/articles/2026-06-12T09-23-05-824Z.html",
+  "exportedFilePath": "data/articles/2026-06-13T06-37-28-418Z.html",
   "dryRun": false,
-  "generatedAt": "2026-06-12T09:23:05.825Z"
+  "generatedAt": "2026-06-13T06:37:28.420Z"
 }
